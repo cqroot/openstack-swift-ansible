@@ -1,24 +1,22 @@
 ---
 - name: Install yum dependency
   yum:
-    name: "{{ packages }}"
-  vars:
-    packages:
-      - python3
-      - python3-pip
-      - python3-devel
-      - centos-release-openstack-train
-      - rsync
-      - rsyslog
-      - memcached
+    name: "{{ item }}"
+  loop:
+    - python3
+    - python3-pip
+    - python3-devel
+    - centos-release-openstack-train
+    - rsync
+    - rsyslog
+    - memcached
 
 - name: Install yum dependency
   yum:
-    name: "{{ packages }}"
-  vars:
-    packages:
-      - liberasurecode
-      - liberasurecode-devel
+    name: "{{ item }}"
+  loop:
+    - liberasurecode
+    - liberasurecode-devel
 
 - name: Update pip3
   shell: pip3 install -U pip
@@ -30,6 +28,7 @@
       - python-openstackclient==5.8.0
       - python-swiftclient==3.13.1
       - python3-memcached==1.51
+      - keystonemiddleware==9.4.0
     executable: pip3
     extra_args: -i https://pypi.tuna.tsinghua.edu.cn/simple
 
@@ -51,13 +50,13 @@
 
 - name: Create swift directory
   file:
-    path: "{{ directories }}"
+    path: "{{ item }}"
     state: directory
     mode: "0755"
     owner: swift
     group: swift
-  vars:
-    directories:
-      - /etc/swift
-      - /var/cache/swift
-      - /var/log/swift
+  loop:
+    - /etc/swift
+    - /var/cache/swift
+    - /var/log/swift
+    - /srv/node
