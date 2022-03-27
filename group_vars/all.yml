@@ -1,0 +1,2 @@
+keystone_host: 172.30.15.127
+swift_mount_check: True

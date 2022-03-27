@@ -1,0 +1,34 @@
+---
+- name: Copy rsync config
+  copy:
+    src: rsyncd.conf
+    dest: /etc/
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Copy rsyslog config
+  copy:
+    src: rsyslog-swift.conf
+    dest: /etc/rsyslog.d/
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Create swift config
+  copy:
+    src: swift.conf
+    dest: /etc/swift/
+    owner: swift
+    group: swift
+    mode: "0644"
+
+- name: Template to swift config
+  template:
+    src: "{{ item }}"
+    dest: /etc/swift/
+  loop:
+    - proxy-server.conf
+    - account-server.conf
+    - container-server.conf
+    - object-server.conf

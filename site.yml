@@ -3,3 +3,9 @@
   gather_facts: no
   roles:
     - role: swift-install
+    - role: swift-config
+
+- hosts: master
+  gather_facts: no
+  roles:
+    - role: swift-ring-generate

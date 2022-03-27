@@ -1,0 +1,42 @@
+---
+- name: Create the base account.builder file
+  shell:
+    cmd: swift-ring-builder account.builder create 10 3 1
+    chdir: /etc/swift/
+
+- name: Create the base container.builder file
+  shell:
+    cmd: swift-ring-builder container.builder create 10 3 1
+    chdir: /etc/swift/
+
+- name: Create the base object.builder file
+  shell:
+    cmd: swift-ring-builder object.builder create 10 3 1
+    chdir: /etc/swift/
+
+- name: Add each storage node to the account ring
+  shell:
+    cmd: for dev in $(ls /srv/node/); do swift-ring-builder account.builder add --region 1 --zone {{ groups['all'].index(inventory_hostname) }} --ip {{ inventory_hostname }} --port 6202 --device ${dev} --weight 100; done
+    chdir: /etc/swift/
+  when: swift_ring_generate_mode == "reuse"
+
+- name: Add each storage node to the container ring
+  shell:
+    cmd: for dev in $(ls /srv/node/); do swift-ring-builder container.builder add --region 1 --zone {{ groups['all'].index(inventory_hostname) }} --ip {{ inventory_hostname }} --port 6202 --device ${dev} --weight 100; done
+    chdir: /etc/swift/
+  when: swift_ring_generate_mode == "reuse"
+
+- name: Add each storage node to the object ring
+  shell:
+    cmd: for dev in $(ls /srv/node/); do swift-ring-builder object.builder add --region 1 --zone {{ groups['all'].index(inventory_hostname) }} --ip {{ inventory_hostname }} --port 6202 --device ${dev} --weight 100; done
+    chdir: /etc/swift/
+  when: swift_ring_generate_mode == "reuse"
+
+- name: Rebalance the ring
+  shell:
+    cmd: swift-ring-builder {{ item }} rebalance
+    chdir: /etc/swift/
+  loop:
+    - account.builder
+    - container.builder
+    - object.builder
