@@ -42,12 +42,6 @@
     name: swift
     group: swift
 
-- name: Create keystone configuration directory
-  file:
-    path: /etc/keystone
-    state: directory
-    mode: "0755"
-
 - name: Create swift directory
   file:
     path: "{{ item }}"
