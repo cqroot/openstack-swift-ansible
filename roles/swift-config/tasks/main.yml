@@ -15,6 +15,14 @@
     group: root
     mode: "0644"
 
+- name: Copy logrotate config
+  copy:
+    src: logrotate-swift
+    dest: /etc/logrotate.d/swift
+    owner: root
+    group: root
+    mode: "0644"
+
 - name: Create swift config
   copy:
     src: swift.conf

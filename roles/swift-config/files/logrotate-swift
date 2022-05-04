@@ -1,0 +1,10 @@
+/var/log/swift/*.log {
+        daily
+        rotate 15
+        compress
+        copytruncate
+        nocreate
+        delaycompress
+        notifempty
+        dateext
+}
